@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Events - NGO Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Events</h2>
+    <a href="{{ url_for('add_event') }}" class="btn btn-primary">Add New Event</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>NGO</th>
+                        <th>Description</th>
+                        <th>Venue</th>
+                        <th>Date</th>
+                        <th>Budget</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event.Event_id }}</td>
+                        <td>{{ event.Event_name }}</td>
+                        <td>{{ event.Ngo_name }}</td>
+                        <td>{{ event.Description[:100] }}{% if event.Description|length > 100 %}...{% endif %}</td>
+                        <td>{{ event.Venue }}</td>
+                        <td>{{ event.Event_date }}</td>
+                        <td>₹{{ event.Budget }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>Make a Donation</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="donationForm">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-control" name="phone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select NGO *</label>
+                        <select class="form-select" name="ngo_id" required>
+                            <option value="">Choose NGO</option>
+                            {% for ngo in ngos %}
+                            <option value="{{ ngo.Ngo_id }}">{{ ngo.Ngo_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₹) *</label>
+                        <input type="number" class="form-control" name="amount" id="amount" 
+                               min="10" max="1000000" step="0.01" required
+                               placeholder="Enter amount between ₹10 and ₹10,00,000">
+                        <div class="form-text">Amount must be between ₹10 and ₹10,00,000</div>
+                        <div id="amount-error" class="text-danger small mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method *</label>
+                        <select class="form-select" name="payment_method" required>
+                            <option value="Online">Online</option>
+                            <option value="Bank_Transfer">Bank Transfer</option>
+                            <option value="UPI">UPI</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100">Donate Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const donationForm = document.getElementById('donationForm');
+    const amountInput = document.getElementById('amount');
+    const amountError = document.getElementById('amount-error');
+    
+    // Form submission validation
+    donationForm.addEventListener('submit', function(event) {
+        const amount = parseFloat(amountInput.value);
+        
+        if (amount < 10) {
+            event.preventDefault();
+            showAmountError('Donation amount must be at least ₹10');
+            amountInput.focus();
+            return false;
+        }
+        
+        if (amount > 1000000) {
+            event.preventDefault();
+            showAmountError('Donation amount cannot exceed ₹10,00,000');
+            amountInput.focus();
+            return false;
+        }
+    });
+    
+    // Real-time validation as user types
+    amountInput.addEventListener('input', function() {
+        const amount = parseFloat(this.value) || 0;
+        
+        if (amount < 10 && amount > 0) {
+            showAmountError('Minimum donation is ₹10');
+        } else if (amount > 1000000) {
+            showAmountError('Maximum donation is ₹10,00,000');
+        } else {
+            hideAmountError();
+        }
+    });
+    
+    // Clear error when user starts typing valid amount
+    amountInput.addEventListener('focus', function() {
+        const amount = parseFloat(this.value) || 0;
+        if (amount >= 10 && amount <= 1000000) {
+            hideAmountError();
+        }
+    });
+    
+    function showAmountError(message) {
+        amountError.textContent = message;
+        amountError.style.display = 'block';
+        amountInput.classList.add('is-invalid');
+    }
+    
+    function hideAmountError() {
+        amountError.style.display = 'none';
+        amountInput.classList.remove('is-invalid');
+    }
+});
+</script>
+
+<style>
+.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+</style>
+{% endblock %}

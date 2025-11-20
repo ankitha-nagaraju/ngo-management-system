@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Donors - NGO Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Donors</h2>
+    <a href="{{ url_for('add_donor') }}" class="btn btn-primary">Add New Donor</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.Donor_id }}</td>
+                        <td>{{ donor.Name }}</td>
+                        <td>{{ donor.Address }}</td>
+                        <td>{{ donor.phones or 'N/A' }}</td>
+                        <td>{{ donor.emails or 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

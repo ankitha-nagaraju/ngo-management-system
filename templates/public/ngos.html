@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Our Partner NGOs</h2>
+<div class="row">
+    {% for ngo in ngos %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ ngo.Ngo_name }}
+                    <span class="badge 
+                        {% if ngo.Efficiency_Score == 'High Impact' %}bg-success
+                        {% elif ngo.Efficiency_Score == 'Growing Impact' %}bg-primary
+                        {% else %}bg-secondary{% endif %} ms-2"
+                        style="font-size: 0.7em;">
+                        {{ ngo.Efficiency_Score }}
+                    </span>
+                </h5>
+                <p class="card-text">{{ ngo.Address }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
